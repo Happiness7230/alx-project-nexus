@@ -28,7 +28,7 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-a%#70f0u8xa$ts+s64rpu
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default='True') in ('True', 'true', '1')
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ['https://p-tj8d.onrender.com']
 
 
 # Application definition
