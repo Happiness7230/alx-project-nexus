@@ -28,10 +28,10 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-a%#70f0u8xa$ts+s64rpu
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default='True') in ('True', 'true', '1')
 
-ALLOWED_HOSTS = [ 'https://p-tj8d.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = [ 'p-tj8d.onrender.com', 'localhost', '127.0.0.1']
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://p-tj8d.onrender.com'
+    'https://p-tj8d.onrender.com',
 ]
 
 
