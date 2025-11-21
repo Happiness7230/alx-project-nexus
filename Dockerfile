@@ -13,5 +13,6 @@ COPY . /app
 # Collect static (optional)
 RUN python manage.py collectstatic --noinput || true
 
-CMD CMD gunicorn online_poll_backend.wsgi:application --bind 0.0.0.0:$PORT
+CMD ["gunicorn", "online_poll_backend.wsgi:application", "--bind", "0.0.0.0:8000"]
+
 
