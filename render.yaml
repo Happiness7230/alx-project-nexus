@@ -1,0 +1,4 @@
+services:
+  - type: redis
+    name: poll-redis
+    ipAllowList: []  # public access disabled (private only)
