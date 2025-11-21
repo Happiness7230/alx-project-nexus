@@ -11,4 +11,4 @@ redis>=4.6.0
 pytest-django>=4.5.2
 black==24.3.0
 flake8>=6.0.0
-
+dj-database-url
