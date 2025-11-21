@@ -28,6 +28,7 @@ from rest_framework_simplejwt.views import (
 )
 
 urlpatterns = [
+    path("", lambda request: JsonResponse({"message": "Online Poll API is running"})),
     path('admin/', admin.site.urls),
     path('api/polls/', include('polls.urls')),
     path("api/auth/register/", RegisterView.as_view(), name="auth_register"),
@@ -39,12 +40,6 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-
-urlpatterns = [
-    # ... existing urls
-    path("api/auth/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
-    path("api/auth/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
-]
 
 schema_view = get_schema_view(
     openapi.Info(
