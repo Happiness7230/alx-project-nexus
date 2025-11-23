@@ -25,15 +25,18 @@ urlpatterns = [
    
     # API routes
     path('api/polls/', include('polls.urls')),
+    path('accounts/', include('accounts.urls')),
     path("api/auth/register/", RegisterView.as_view(), name="auth_register"),
     path("api/auth/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/auth/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
 
     # Swagger & Redoc
     path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger-ui'),
-    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='redoc-ui'),
     path('schema/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
 
     # Default landing page → redirects to Swagger
     path('', RedirectView.as_view(url='/docs/', permanent=False)),
+     path('openapi.json', schema_view.without_ui(cache_timeout=0), name='openapi-json'),
+    path('openapi.yaml', schema_view.without_ui(cache_timeout=0), name='openapi-yaml'),
 ]
