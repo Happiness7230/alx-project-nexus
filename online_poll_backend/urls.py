@@ -31,8 +31,8 @@ urlpatterns = [
 
     # Swagger & Redoc
     path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger-ui'),
-    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='redoc-ui'),
-    path('schema/', schema_view.without_ui(cache_timeout=0), name='openapi-schema'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    path('schema/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
 
     # Default landing page → redirects to Swagger
     path('', RedirectView.as_view(url='/docs/', permanent=False)),
