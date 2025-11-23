@@ -19,7 +19,8 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
+    path("", lambda request: JsonResponse({"message": "Online Poll API is running"})),
+   
     # API routes
     path('api/polls/', include('polls.urls')),
     path("api/auth/register/", RegisterView.as_view(), name="auth_register"),
@@ -27,10 +28,10 @@ urlpatterns = [
     path("api/auth/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
 
     # Swagger & Redoc
-    path('api/docs/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger-ui'),
-    path('api/redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='redoc-ui'),
-    path('api/schema/', schema_view.without_ui(cache_timeout=0), name='openapi-schema'),
+    path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='redoc-ui'),
+    path('schema/', schema_view.without_ui(cache_timeout=0), name='openapi-schema'),
 
     # Default landing page → redirects to Swagger
-    path('', RedirectView.as_view(url='/api/docs/', permanent=False)),
+    path('', RedirectView.as_view(url='/docs/', permanent=False)),
 ]
