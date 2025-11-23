@@ -22,6 +22,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework.permissions import AllowAny
 from accounts.views import RegisterView
+from django.views.generic import RedirectView
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -102,6 +103,7 @@ urlpatterns = [
     
     # API endpoints
     path('api/', include('polls.urls')),
+    path('', RedirectView.as_view(url='/docs/', permanent=False)),
     
     # Swagger documentation
     path('api/docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
