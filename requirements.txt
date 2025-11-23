@@ -13,3 +13,5 @@ black==24.3.0
 flake8>=6.0.0
 dj-database-url
 djangorestframework-simplejwt
+drf-yasg
+
