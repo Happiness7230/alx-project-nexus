@@ -6,6 +6,8 @@ from drf_yasg import openapi
 from rest_framework.permissions import AllowAny
 from accounts.views import RegisterView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from django.http import JsonResponse
+
 
 schema_view = get_schema_view(
     openapi.Info(
