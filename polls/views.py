@@ -31,8 +31,8 @@ class PollViewSet(viewsets.ModelViewSet):
 
         # get option from request or URL
     option_id = option_pk or request.data.get('option')
-        if not option_id:
-            return Response({"detail": "Option id required."}, status=status.HTTP_400_BAD_REQUEST)
+    if not option_id:
+        return Response({"detail": "Option id required."}, status=status.HTTP_400_BAD_REQUEST)
 
         option = get_object_or_404(Option, pk=option_id, poll=poll)
 
