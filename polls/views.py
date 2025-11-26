@@ -1,4 +1,4 @@
-from rest_framework import generics, views, status, permissions
+from rest_framework import generics, views, status, permissions, viewsets
 from rest_framework.response import Response
 from django.db import transaction
 from django.db.models import Count, F
@@ -23,6 +23,11 @@ class VoteCreateView(views.APIView):
         poll = get_object_or_404(Poll,id=poll_id, pk=poll_pk)
         if poll.is_expired() or not poll.is_active:
             return Response({"detail": "Poll is closed."}, status=status.HTTP_400_BAD_REQUEST)
+
+class PollViewSet(viewsets.ModelViewSet):
+    queryset = Poll.objects.prefetch_related('options').all()
+    serializer_class = PollSerializer
+
 
         # get option from request or URL
         option_id = option_pk or request.data.get('option')
