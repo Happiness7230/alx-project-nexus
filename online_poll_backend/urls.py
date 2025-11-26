@@ -4,7 +4,7 @@ from django.views.generic import RedirectView
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework.permissions import AllowAny
-from accounts.views import RegisterView
+#from accounts.views import RegisterView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from django.http import JsonResponse
 
@@ -26,7 +26,7 @@ urlpatterns = [
     # API routes
     path('api/polls/', include('polls.urls')),
     path('accounts/', include('accounts.urls')),
-    path("api/auth/register/", RegisterView.as_view(), name="auth_register"),
+    #path("api/auth/register/", RegisterView.as_view(), name="auth_register"),
     path("api/auth/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/auth/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
 
