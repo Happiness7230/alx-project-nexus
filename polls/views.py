@@ -24,15 +24,21 @@ class VoteCreateView(views.APIView):
         if poll.is_expired() or not poll.is_active:
             return Response({"detail": "Poll is closed."}, status=status.HTTP_400_BAD_REQUEST)
 
-class PollViewSet(viewsets.ModelViewSet):
-    queryset = Poll.objects.prefetch_related('options').all()
-    serializer_class = PollSerializer
+class VoteCreateView(views.APIView):
+    permission_classes = (permissions.IsAuthenticated,)
 
+    def post(self, request, poll_pk, poll_id, option_pk=None):
+        # All the logic *must* be indented within this method
+        
+        # fetch poll
+        poll = get_object_or_404(Poll, id=poll_id, pk=poll_pk)
+        if poll.is_expired() or not poll.is_active:
+            return Response({"detail": "Poll is closed."}, status=status.HTTP_400_BAD_REQUEST)
 
         # get option from request or URL
-    option_id = option_pk or request.data.get('option')
-    if not option_id:
-        return Response({"detail": "Option id required."}, status=status.HTTP_400_BAD_REQUEST)
+        option_id = option_pk or request.data.get('option')
+        if not option_id:
+            return Response({"detail": "Option id required."}, status=status.HTTP_400_BAD_REQUEST) # CORRECTLY INDENTED
 
         option = get_object_or_404(Option, pk=option_id, poll=poll)
 
@@ -61,6 +67,7 @@ class PollViewSet(viewsets.ModelViewSet):
             )
             Option.objects.filter(pk=option.pk).update(vote_count=F('vote_count') + 1)
 
+        # Final return statement must also be indented
         return Response(VoteSerializer(vote).data, status=status.HTTP_201_CREATED)
 
 
