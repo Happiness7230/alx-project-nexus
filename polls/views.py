@@ -24,30 +24,23 @@ class VoteCreateView(views.APIView):
         if poll.is_expired() or not poll.is_active:
             return Response({"detail": "Poll is closed."}, status=status.HTTP_400_BAD_REQUEST)
 
-class VoteCreateView(views.APIView):
-    permission_classes = (permissions.IsAuthenticated,)
-
-    def post(self, request, poll_pk, poll_id, option_pk=None):
-        # All the logic *must* be indented within this method
-        
-        # fetch poll
-        poll = get_object_or_404(Poll, id=poll_id, pk=poll_pk)
-        if poll.is_expired() or not poll.is_active:
-            return Response({"detail": "Poll is closed."}, status=status.HTTP_400_BAD_REQUEST)
+class PollViewSet(viewsets.ModelViewSet):
+    queryset = Poll.objects.prefetch_related('options').all()
+    serializer_class = PollSerializer
 
         # get option from request or URL
-        option_id = option_pk or request.data.get('option')
-        if not option_id:
-            return Response({"detail": "Option id required."}, status=status.HTTP_400_BAD_REQUEST) # CORRECTLY INDENTED
+
+    option_id = option_pk or request.data.get('option')
+    if not option_id:
+        return Response({"detail": "Option id required."}, status=status.HTTP_400_BAD_REQUEST)
 
         option = get_object_or_404(Option, pk=option_id, poll=poll)
-
         # Determine voter identity
         user = request.user if request.user.is_authenticated else None
         voter_uuid = request.data.get('voter_uuid')
         voter_ip = request.META.get('REMOTE_ADDR')
-
         # duplicate protection
+
         existing = Vote.objects.filter(poll=poll)
         if user and existing.filter(user=user).exists():
             return Response({"detail": "User has already voted."}, status=status.HTTP_400_BAD_REQUEST)
@@ -55,7 +48,6 @@ class VoteCreateView(views.APIView):
             return Response({"detail": "Voter has already voted."}, status=status.HTTP_400_BAD_REQUEST)
         elif voter_ip and existing.filter(voter_ip=voter_ip).exists():
             return Response({"detail": "IP has already voted."}, status=status.HTTP_400_BAD_REQUEST)
-
         # create vote atomically
         with transaction.atomic():
             vote = Vote.objects.create(
@@ -66,8 +58,7 @@ class VoteCreateView(views.APIView):
                 voter_ip=voter_ip
             )
             Option.objects.filter(pk=option.pk).update(vote_count=F('vote_count') + 1)
-
-        # Final return statement must also be indented
+            
         return Response(VoteSerializer(vote).data, status=status.HTTP_201_CREATED)
 
 
