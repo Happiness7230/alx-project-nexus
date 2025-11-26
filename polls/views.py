@@ -1,19 +1,11 @@
-from rest_framework import generics, views, viewsets, status, permissions
+from rest_framework import generics, views, status, permissions
 from rest_framework.response import Response
 from django.db import transaction
-from django.db.models import Count
+from django.db.models import Count, F
 from django.shortcuts import get_object_or_404
 from .models import Poll, Option, Vote
 from .serializers import PollSerializer, VoteSerializer
 from django.core.cache import cache
-from django.db.models import F
-
-class PollViewSet(viewsets.ModelViewSet):
-    """
-    A viewset for viewing and editing poll instances.
-    """
-    queryset = Poll.objects.all().order_by('-created_at')
-    serializer_class = PollSerializer
 
 class PollCreateListView(generics.ListCreateAPIView):
     queryset = Poll.objects.prefetch_related('options').all()
@@ -66,6 +58,19 @@ class VoteCreateView(views.APIView):
 
         return Response(VoteSerializer(vote).data, status=status.HTTP_201_CREATED)
 
+
+# polls/views.py
+
+from django.db import transaction
+from django.db.models import F
+from django.shortcuts import get_object_or_404
+from rest_framework import views, permissions, status
+from rest_framework.response import Response
+from django.core.cache import cache
+# Import your models
+from .models import Poll, Option, Vote
+
+# ... (Assume your VoteCreateView class exists somewhere above or below this) ...
 
 class PollResultsView(views.APIView):
     """

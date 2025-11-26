@@ -13,7 +13,12 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 from decouple import config, Csv
 from datetime import timedelta
-import dj_database_url
+try:
+    import dj_database_url
+except Exception:
+    # dj_database_url may not be installed in some environments (e.g., local dev)
+    # Fall back to None and handle later when building DATABASES.
+    dj_database_url = None
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -86,13 +91,24 @@ WSGI_APPLICATION = 'online_poll_backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    "default": dj_database_url.config(
-        default=config("DATABASE_URL"),
-        conn_max_age=600,
-        ssl_require=True
-    )
-}
+if dj_database_url:
+    # Use dj_database_url when available (production / DATABASE_URL present)
+    DATABASES = {
+        "default": dj_database_url.config(
+            default=config("DATABASE_URL", default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}"),
+            conn_max_age=600,
+            ssl_require=True
+        )
+    }
+else:
+    # Fallback for local/dev environments where dj_database_url isn't installed.
+    # Uses a local sqlite DB so the project still runs out-of-the-box.
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 
 # Password validation
